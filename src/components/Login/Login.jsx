@@ -1,10 +1,11 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Provider/AuthProvider";
 import { useContext } from "react";
 
 const Login = () => {
 
-    const {signinUser} = useContext(AuthContext);
+    const {signinUser, signInWithGoogle} = useContext(AuthContext);
+    const navigate = useNavigate();
 
     const handleLoginSubmit = e => {
         e.preventDefault();
@@ -15,9 +16,22 @@ const Login = () => {
         signinUser(email, password)
         .then(result => {
             console.log(result.user);
+            e.target.reset();
+            navigate('/');
+
         })
         .catch(error => {
             console.log(error);
+        })
+    }
+
+    const handleGoogleSignIn= () =>{
+        signInWithGoogle()
+        .then(result => {
+            console.log(result.user);
+        })
+        .catch(error => {
+            console.log(error)
         })
     }
 
@@ -52,6 +66,7 @@ const Login = () => {
                             <button className="btn btn-primary">Login</button>
                         </div>
                         <p>New Here? Please <Link className="text-blue-700 underline" to='/register'>Regiser</Link></p>
+                        <button onClick={handleGoogleSignIn} className="btn btn-ghost">Log in with Google</button>
                     </form>
                 </div>
             </div>
